@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "firebase": "^6.3.3",
+    "npm-run-all": "^4.1.5",
     "polished": "^3.4.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -11,7 +12,9 @@
     "styled-components": "^4.3.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start:api": "firebase serve --only functions:api",
+    "start:app": "react-scripts start",
+    "start": "npm-run-all --parallel start:*",
     "build": "react-scripts build",
     "deploy": "firebase deploy",
     "test": "react-scripts test",

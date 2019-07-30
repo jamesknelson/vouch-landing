@@ -1,5 +1,27 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## Configuration
+
+You'll need to add two files:
+
+- `.env.development.local` file, based on the template at `.env.example`. This is used by the dev server.
+- `.env.production.local` file, based on the template at `.env.example`. This is used when deploying.
+- `functions/.runtimeconfig.json`, based on the template at `functions/.runtimeconfig.json.example`
+
+Then, just start the development server with:
+
+```bash
+yarn start
+```
+
+And deploy to firebase with
+
+```bash
+yarn deploy
+```
+
+Once this is 
+
 ## Available Scripts
 
 In the project directory, you can run:

@@ -1,11 +1,11 @@
 export default {
   firebase: {
-    apiKey: "AIzaSyDYydYcZ14HlSV049LR2sSd5naKn-kuoWU",
-    authDomain: "vouchchat-landing-386eb.firebaseapp.com",
-    databaseURL: "https://vouchchat-landing-386eb.firebaseio.com",
-    projectId: "vouchchat-landing-386eb",
-    storageBucket: "",
-    messagingSenderId: "277580460754",
-    appId: "1:277580460754:web:7978a27f25cee4ee"
-  }
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    databaseURL: process.env.REACT_APP_FIREBASE_DATABASE_URL,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID,
+  },
 }

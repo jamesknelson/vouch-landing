@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import ResetCSS  from './reset.css'
+import React, { useState } from 'react'
+import ResetCSS from './reset.css'
 import styled, { css } from 'styled-components/macro'
 import { functions } from './backend'
 import { LoadingBar } from './loading'
@@ -12,7 +12,7 @@ const Card = styled.div`
   border: 1px solid ${colors.structure.border};
   border-radius: 8px;
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.01), 0 0 2px 0px rgba(0, 0, 0, 0.02);
-  margin: 4rem auto;
+  margin: 4rem auto 0;
   max-width: 360px;
   padding: 1rem 3rem;
   position: relative;
@@ -57,11 +57,12 @@ const StyledInputWrapper = styled.div`
   position: relative;
 `
 
-const Input = props =>
+const Input = props => (
   <StyledInputWrapper>
     <StyledInput {...props} />
     <StyledInputOutline />
   </StyledInputWrapper>
+)
 
 const StyledButton = styled.button`
   border-radius: 9999px;
@@ -74,9 +75,11 @@ const StyledButton = styled.button`
   position: relative;
   width: 100%;
 
-  ${props => props.disabled && css`
-    opacity: 0.5;
-  `}
+  ${props =>
+    props.disabled &&
+    css`
+      opacity: 0.5;
+    `}
 
   ${focusRing('::after', { radius: '9999px' })}
 `
@@ -108,7 +111,7 @@ function App() {
   let isSubmitting = status === 'submitting'
   let isDone = status === 'done'
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async event => {
     event.preventDefault()
 
     let issues = validate({ name, email })
@@ -122,7 +125,7 @@ function App() {
 
     setJoinState({
       issues: null,
-      status: 'submitting'
+      status: 'submitting',
     })
 
     try {
@@ -130,32 +133,31 @@ function App() {
       if (data.status === 'success') {
         setJoinState({
           issues: null,
-          status: 'done'
+          status: 'done',
         })
         return
       }
-    }
-    catch (error) {}
+    } catch (error) {}
 
     setJoinState({
       issues: {
-        error: 'Something went wrong.'
+        error: 'Something went wrong.',
       },
       status: 'error',
     })
   }
 
-  const handleChangeName = (event) => {
+  const handleChangeName = event => {
     setName(event.target.value)
   }
 
-  const handleChangeEmail = (event) => {
+  const handleChangeEmail = event => {
     setEmail(event.target.value)
   }
 
   let content
   if (isDone) {
-    content = 
+    content = (
       <P>
         Thanks for joining in!
         <br />
@@ -163,8 +165,8 @@ function App() {
         <br />
         You'll get an email.
       </P>
-  }
-  else {
+    )
+  } else {
     content = (
       <>
         <P>
@@ -181,14 +183,8 @@ function App() {
             Your email
             <Input type="email" value={email} onChange={handleChangeEmail} />
           </StyledLabel>
-          {issues &&
-            <StyledIssue>
-              {Object.values(issues)[0]}
-            </StyledIssue>
-          }
-          <StyledButton
-            disabled={isSubmitting}
-            type="submit">
+          {issues && <StyledIssue>{Object.values(issues)[0]}</StyledIssue>}
+          <StyledButton disabled={isSubmitting} type="submit">
             I'll vouch for that
           </StyledButton>
         </form>
@@ -197,33 +193,63 @@ function App() {
   }
 
   return (
-    <div css={css`
-      padding: 0 1rem;
-    `}>
-    <ResetCSS />
-    <Card>
-    <LoadingBar active={isSubmitting} css={css`
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-    `} />
-    <div css={css`text-align: center;`}>
-      <img src={logo} alt="Logo" css={css`
-        display: block;
-        margin: 0 auto;
-        margin-bottom: 0.75rem;
-        margin-top: 1rem;
-        width: 2rem;
-      `} />
-      <img src={vouch} alt="Vouch" css={css`
-        height: 1rem;
-      `} />
-      </div>
-      {content}
-    </Card>
+    <div
+      css={css`
+        padding: 0 1rem;
+      `}>
+      <ResetCSS />
+      <Card>
+        <LoadingBar
+          active={isSubmitting}
+          css={css`
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+          `}
+        />
+        <div
+          css={css`
+            text-align: center;
+          `}>
+          <img
+            src={logo}
+            alt="Logo"
+            css={css`
+              display: block;
+              margin: 0 auto;
+              margin-bottom: 0.75rem;
+              margin-top: 1rem;
+              width: 2rem;
+            `}
+          />
+          <img
+            src={vouch}
+            alt="Vouch"
+            css={css`
+              height: 1rem;
+            `}
+          />
+        </div>
+        {content}
+      </Card>
+      <footer
+        css={css`
+          text-align: center;
+          margin: 0.5rem auto 2rem;
+        `}>
+        <a
+          href="https://github.com/jamesknelson/vouch-landing"
+          css={css`
+            color: ${colors.text.tertiary};
+            font-size: 0.8rem;
+            text-decoration: underline;
+          `}>
+          See source at GitHub
+        </a>
+      </footer>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App

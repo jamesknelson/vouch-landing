@@ -5,23 +5,33 @@ import { functions } from './backend'
 import { LoadingBar } from './loading'
 import logo from './media/logo.svg'
 import vouch from './media/vouch.svg'
-import { colors, focusRing } from './theme'
+import { colors, radii, shadows, beaconRing } from './theme'
 
 const Card = styled.div`
-  background-color: ${colors.structure.bg};
-  border: 1px solid ${colors.structure.border};
-  border-radius: 8px;
+  background-color: ${colors.background.card};
+  border: 1px solid ${colors.border.default};
+  border-radius: ${radii.medium};
   box-shadow: 0 0 5px 3px rgba(0, 0, 0, 0.01), 0 0 2px 0px rgba(0, 0, 0, 0.02);
   margin: 4rem auto 0;
   max-width: 360px;
   padding: 1rem 3rem;
   position: relative;
+  z-index: 0;
+`
+
+const StyledLink = styled.a`
+  color: ${colors.text.alt};
+  font-size: 0.8rem;
+  text-decoration: underline;
+  position: relative;
+
+  ${beaconRing('::after', '9999px')}
 `
 
 const P = styled.p`
-  color: ${colors.text.tertiary};
+  color: ${colors.text.alt};
   font-size: 0.9rem;
-  line-height: 1.2rem;
+  line-height: 1.3rem;
   margin: 1.5rem 0;
   text-align: center;
 `
@@ -33,28 +43,29 @@ const StyledIssue = styled.p`
 `
 
 const StyledLabel = styled.label`
-  color: ${colors.ink.mid};
+  color: ${colors.text.label};
   display: block;
   font-size: 0.8rem;
   font-weight: 600;
   margin-top: 0.5rem;
 `
 
+const StyledInputWrapper = styled.div`
+  position: relative;
+`
+
 const StyledInputOutline = styled.div``
 
 const StyledInput = styled.input`
-  border: 1px solid ${colors.control.border.default};
-  border-radius: 4px;
+  border: 1px solid ${colors.border.field};
+  border-radius: ${radii.small};
+  box-shadow: ${shadows.sunk()};
   display: block;
   font-size: 1rem;
   padding: 0.5rem;
   width: 100%;
 
-  ${focusRing(` + ${StyledInputOutline}`)}
-`
-
-const StyledInputWrapper = styled.div`
-  position: relative;
+  ${beaconRing(` + ${StyledInputOutline}`, radii.small)}
 `
 
 const Input = props => (
@@ -66,8 +77,9 @@ const Input = props => (
 
 const StyledButton = styled.button`
   border-radius: 9999px;
-  background-color: ${colors.ink.black};
-  color: ${colors.text.light};
+  background-color: ${colors.primary.default};
+  box-shadow: ${shadows.bevel()}, ${shadows.drop()};
+  color: ${colors.text.reverse};
   cursor: pointer;
   font-size: 1rem;
   margin: 1rem 0;
@@ -81,29 +93,27 @@ const StyledButton = styled.button`
       opacity: 0.5;
     `}
 
-  ${focusRing('::after', { radius: '9999px' })}
+  ${beaconRing('::after', '9999px')}
 `
 
 const joinMailingList = functions.httpsCallable('joinMailingList')
 
 function validate({ name, email }) {
-  let issues = {}
   if (!name) {
-    issues.name = 'Who are you, though?'
+    return 'Who are you, though?'
   }
   if (!email) {
-    issues.email = "You'll need an email to join the list."
+    return "You'll need an email to join the list."
   }
   if (!/.+@.+/.test(email)) {
-    issues.email = "That email address doesn't look quite right."
+    return "That email address doesn't look quite right."
   }
-  return Object.keys(issues).length === 0 ? null : issues
 }
 
 function App() {
-  let [{ status, issues }, setJoinState] = useState({
+  let [{ status, issue }, setJoinState] = useState({
     status: 'fresh',
-    issues: null,
+    issue: null,
   })
   let [name, setName] = useState('')
   let [email, setEmail] = useState('')
@@ -114,17 +124,17 @@ function App() {
   const handleSubmit = async event => {
     event.preventDefault()
 
-    let issues = validate({ name, email })
-    if (issues) {
+    let issue = validate({ name, email })
+    if (issue) {
       setJoinState({
         status: 'invalid',
-        issues,
+        issue,
       })
       return
     }
 
     setJoinState({
-      issues: null,
+      issue: null,
       status: 'submitting',
     })
 
@@ -132,7 +142,7 @@ function App() {
       let { data } = await joinMailingList({ name, email })
       if (data.status === 'success') {
         setJoinState({
-          issues: null,
+          issue: null,
           status: 'done',
         })
         return
@@ -140,9 +150,7 @@ function App() {
     } catch (error) {}
 
     setJoinState({
-      issues: {
-        error: 'Something went wrong.',
-      },
+      issue: 'Something went wrong.',
       status: 'error',
     })
   }
@@ -183,7 +191,7 @@ function App() {
             Your email
             <Input type="email" value={email} onChange={handleChangeEmail} />
           </StyledLabel>
-          {issues && <StyledIssue>{Object.values(issues)[0]}</StyledIssue>}
+          {issue && <StyledIssue>{issue}</StyledIssue>}
           <StyledButton disabled={isSubmitting} type="submit">
             I'll vouch for that
           </StyledButton>
@@ -238,15 +246,9 @@ function App() {
           text-align: center;
           margin: 0.5rem auto 2rem;
         `}>
-        <a
-          href="https://github.com/jamesknelson/vouch-landing"
-          css={css`
-            color: ${colors.text.tertiary};
-            font-size: 0.8rem;
-            text-decoration: underline;
-          `}>
+        <StyledLink href="https://github.com/jamesknelson/vouch-landing">
           See source at GitHub
-        </a>
+        </StyledLink>
       </footer>
     </div>
   )

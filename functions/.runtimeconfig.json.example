@@ -1,6 +1,6 @@
 {
   "mailchimp": {
-    "list_id": "",
+    "audience_id": "",
     "key": ""
   }
 }

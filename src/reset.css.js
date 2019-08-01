@@ -1,5 +1,5 @@
 import { createGlobalStyle } from 'styled-components/macro'
-import { colors } from './theme'
+import { colors, dimensions } from 'theme'
 
 export default createGlobalStyle`
   * {
@@ -18,17 +18,17 @@ export default createGlobalStyle`
   }
 
   html {
-    background-color: ${colors.structure.wash};
-
+    background-color: ${colors.background.canvas};
     box-sizing: border-box;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
       "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
       sans-serif;
     
-    font-size: 16px;
+    font-size: ${dimensions.oneRemInPixels}px;
     height: 100%;
     line-height: 1.5rem;
     min-height: 100%;
+    overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -36,6 +36,5 @@ export default createGlobalStyle`
   body, #root {
     height: 100%;
     min-height: 100%;
-    padding-top: 1px;
   }
 `

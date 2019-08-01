@@ -23,7 +23,7 @@ const loadingBarKeyframes = keyframes`
 export const LoadingBar = styled.div`
   height: 2px;
   width: 100%;
-  background-color: ${props => props.color || colors.ink.mid};
+  background-color: ${props => props.color || colors.primary.default};
   background-size: 35px 35px;
   z-index: 9999;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) inset;
@@ -37,6 +37,8 @@ export const LoadingBar = styled.div`
   ${props =>
     props.active &&
     css`
+      animation: ${loadingBarKeyframes} 10s ease-out;
+      animation-fill-mode: forwards;
       opacity: 1;
 
       /**
@@ -46,8 +48,5 @@ export const LoadingBar = styled.div`
       * pages with async data.
       */
       transition-delay: 100ms;
-
-      animation: ${loadingBarKeyframes} 10s ease-out;
-      animation-fill-mode: forwards;
     `}
 `
